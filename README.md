@@ -1,7 +1,9 @@
 # My First Javascript Project
 
     terminal
+    '''
       cd (folder) > mkdir (projectName) > code (projectName) > app.js , index.html , styles.css > browser
+    '''
 
 # JavaScript
 
