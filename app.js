@@ -1,40 +1,44 @@
-const title = document.querySelector("div.hello h1");
+const loginForm = document.getElementById('login-form');
+const loginInput = loginForm.querySelector('input');
+const loginButton = loginForm.querySelector('button');
 
-console.dir(title);
 
-title.innerText = "Got You!";
-title.style.color = "blue";
+const loginLink = document.querySelector('a');
+const loginName = document.getElementById('greetings');
 
-function handleTitleClick() {
-    title.innerText = "Clicked";
-    title.style.color = "red";
+const HIDDEN_USRNAME = 'hidden';
+const USERNAME_KEY = 'usernames';
+
+function onLoginSubmit(information) {
+    information.preventDefault();
+    loginForm.classList.add(HIDDEN_USRNAME);
+    const input_value = loginInput.value;
+    localStorage.setItem(USERNAME_KEY, input_value);
+    paintGreetings(input_value);
+
 }
 
-function handleMouseEnter() {
-    title.innerText = "Hovered";
-    title.style.color = "white";
+function paintGreetings(username) {
+    loginName.innerText = `Hello ${username}`;
+    loginName.classList.remove(HIDDEN_USRNAME);
 }
 
-function handleMouseLeave() {
-    title.innerText = "Bye!";
+function handleLinkClick(event) {
+    event.preventDefault();
+    console.log(event);
 }
 
+loginLink.addEventListener('click', handleLinkClick);
 
-function handleWindowResize() {
-    document.body.style.backgroundColor = "tomato";
+
+const savedUsrname = localStorage.getItem(USERNAME_KEY);
+console.log(savedUsrname);
+// check if there is username in localstorage
+if(savedUsrname === null){
+    //show the form
+    loginForm.classList.remove(HIDDEN_USRNAME);
+    loginForm.addEventListener('submit',onLoginSubmit);
+} else {
+    //show greetings
+    paintGreetings(savedUsrname)
 }
-
-function handleWindowCopy() {
-    alert("you copied!");
-}
-
-function handleWindowWheel() {
-    alert("you just rolled!")
-}
-
-title.onclick = handleTitleClick;
-title.addEventListener("mouseenter", handleMouseEnter);
-title.addEventListener("mouseleave", handleMouseLeave);
-window.addEventListener("resize", handleWindowResize);
-window.addEventListener("copy", handleWindowCopy);
-window.addEventListener("wheel", handleWindowWheel);
