@@ -5,20 +5,20 @@ const loginButton = loginForm.querySelector("button");
 const loginLink = document.querySelector("a");
 const loginName = document.getElementById("greetings");
 
-const HIDDEN_USRNAME = "hidden";
-const USERNAME_KEY = "usernames";
+const HiddenUsrName = "hidden";
+const usrNameKey = "usernames";
 
 function onLoginSubmit(information) {
   information.preventDefault();
-  loginForm.classList.add(HIDDEN_USRNAME);
-  const input_value = loginInput.value;
-  localStorage.setItem(USERNAME_KEY, input_value);
-  paintGreetings(input_value);
+  loginForm.classList.add(HiddenUsrName);
+  const inputValue = loginInput.value;
+  localStorage.setItem(usrNameKey, inputValue);
+  paintGreetings(inputValue);
 }
 
 function paintGreetings(username) {
   loginName.innerText = `Hello ${username}`;
-  loginName.classList.remove(HIDDEN_USRNAME);
+  loginName.classList.remove(HiddenUsrName);
 }
 
 function handleLinkClick(event) {
@@ -28,12 +28,12 @@ function handleLinkClick(event) {
 
 loginLink.addEventListener("click", handleLinkClick);
 
-const savedUsrname = localStorage.getItem(USERNAME_KEY);
+const savedUsrname = localStorage.getItem(usrNameKey);
 console.log(savedUsrname);
 // check if there is username in localstorage
 if (savedUsrname === null) {
   //show the form
-  loginForm.classList.remove(HIDDEN_USRNAME);
+  loginForm.classList.remove(HiddenUsrName);
   loginForm.addEventListener("submit", onLoginSubmit);
 } else {
   //show greetings

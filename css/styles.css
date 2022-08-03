@@ -1,6 +1,8 @@
 @import "reset.css";
+@import url("https://fonts.googleapis.com/css2?family=Rochester&family=Ubuntu:wght@300&display=swap");
+
 .hidden {
-  /* display: none; */
+  display: none;
 }
 body {
   width: 100vw;
@@ -12,6 +14,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  font-family: "Ubuntu", sans-serif;
 }
 .header {
   width: 88.8%;
@@ -19,6 +22,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+#weather {
+  display: flex;
+  gap: 10px;
 }
 .header div:last-child {
   display: flex;
@@ -60,6 +67,15 @@ button {
   align-items: center;
   justify-content: center;
   font-size: 64px;
+}
+#menu {
+  font-size: 24px;
+  border-bottom: 2px solid red;
+  padding: 0 4px 3px;
+  margin-bottom: 15px;
+}
+#menu span span {
+  font-weight: 700;
 }
 #quotes,
 #todo-form {
@@ -119,4 +135,9 @@ a {
   color: rgba(255, 255, 255, 0.4);
   border-radius: 50px;
   margin-bottom: 8px;
+}
+
+#clock {
+  font-family: "Rochester", cursive;
+  font-size: 100px;
 }
