@@ -7,9 +7,18 @@ const menu = [
   "순대국",
   "불고기",
   "샤브샤브",
-  "찌개",
   "쌀국수",
   "돈까스",
+  "뼈해장국",
+  "먼 뼈해장국",
+  "뷔페",
+  "직접고르기",
+  "마라탕",
+  "순두부",
+  "된장찌개",
+  "파스타집",
+  "카레",
+  "피자"
 ];
 
 const opMenu = document.querySelector("#menu span span:first-child");
