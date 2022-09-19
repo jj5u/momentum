@@ -12,3 +12,7 @@
      /* const(updates not allowed--always use const), let(updates allowed--sometimes use let) var(old one don't use--never use var)
      *
      */ object.function(arguments);
+
+# MDN Javascript Reference
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference

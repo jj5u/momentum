@@ -1,7 +1,7 @@
 // 'use strict' added in ES5
 "use strict";
 console.log(age);
-// variables
+// variable r/w(read&write)
 // 'let' added in ES6
 // mutable data type
 let globalName = "user";
@@ -21,12 +21,15 @@ console.log(name); // can't see inside {block scope}
 }
 console.log(age);
 
-// constants
+// constant r(read only)
 // favor immutable data type always.
 // reason 1 - security
 // reason 2 - thread safety
 // reason 1 - reduce human mistakes
 const dayInWeeks = 7;
+// !NOTE
+// Immutable data types : primitive types, frozen object (i.e. object.freeze())
+// Mutable data types : all objects by default are mutable in JS
 
 // variable types
 // primitive, single item : number, string, boolean, null, undefined, symbol
