@@ -49,6 +49,9 @@ const menu = [
   "곱창전골",
   "샐러드😏(훅트포케)",
   "아부리(일식집)",
+  "전주맛집",
+  "천사의 섬",
+  "동태탕",
 ];
 
 const opMenu = document.querySelector("#menu span span:first-child");
