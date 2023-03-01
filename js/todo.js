@@ -38,7 +38,7 @@ function handleTodoSubmit(event) {
     id: Date.now(), //almost random
   };
   todos.push(newTodoObj);
-  paintTodo(newTodoObj);
+  paintTodo(todos);
   saveTodos();
 }
 
