@@ -42,6 +42,7 @@ let menu = [
  {name: "풍년집", weight: 0.7},
  {name: "김밥", weight: 0.3},
  {name: "닭볶음탕", weight: 0.4},
+ {name: "보들미역", weight: 0.5},
 ];
 
 
