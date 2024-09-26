@@ -13,32 +13,151 @@
 
       <div>
         <h1 class="hidden" id="greetings"></h1>
-        <form class="hidden" id="login-form">
-          <input type="text" placeholder="what is your name?" required maxlength="15" />
-          <button>log in</button>
-        </form>
+
+        <input
+          id="restaurantInput"
+          type="text"
+          placeholder="추가할 메뉴를 작성해주세요"
+          required
+          maxlength="15"
+        />
+
+        <input id="weightInput" type="number" placeholder="가중치" required maxlength="4" />
+        <button id="addRestaurantButton">추가</button>
       </div>
     </div>
-    <h2 id="clock">00:00:00</h2>
+
     <div id="menu">
-      <span>오늘의 뭐먹지 : <span></span></span>
-    </div>
-    <div id="quotes"><span> "quotes" </span></div>
-    <div class="todo">
-      <form action="" id="todo-form">
-        <input type="text" placeholder="Write a To Do and Press Enter" required />
-      </form>
-      <ul id="todo-list"></ul>
+      <span>오늘의 뭐먹지 :</span>
+      <h2><span id="selectedMenu"></span></h2>
     </div>
 
-    <a href="https://nomadcoders.co">Go to courses</a>
-
-    <script src="js/greetings.js"></script>
-    <script src="js/clock.js"></script>
-    <script src="js/quotes.js"></script>
     <script src="js/background.js"></script>
-    <script src="js/todo.js"></script>
-    <script src="js/weather.js"></script>
-    <script src="js/what_to_eat.js"></script>
   </body>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwlRpwi4_9Iyzs7eszZTGtYDYOBzyYvo4",
+      authDomain: "native-eat-what.firebaseapp.com",
+      projectId: "native-eat-what",
+      storageBucket: "native-eat-what.appspot.com",
+      messagingSenderId: "318833712162",
+      appId: "1:318833712162:web:e2587447065c7631a73e7b",
+    };
+    // Firebase 앱 및 Firestore 초기화
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Firestore에서 메뉴 리스트 불러오기
+    async function getMenu() {
+      const menuDoc = await getDoc(doc(db, "menus", "restaurantMenu"));
+      if (menuDoc.exists()) {
+        return menuDoc.data().menu; // 메뉴 리스트를 JSON으로 불러옴
+      } else {
+        console.log("No such document!");
+        return [];
+      }
+    }
+
+    // Firestore에 메뉴 리스트 업데이트하기
+    async function updateMenu(newMenuList) {
+      try {
+        await setDoc(doc(db, "menus", "restaurantMenu"), {
+          menu: newMenuList,
+        });
+        console.log("Menu successfully updated!");
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+    }
+
+    // 가중치 기반 랜덤 메뉴 선택 함수
+    function getRandomMenu(menu) {
+      const totalWeight = menu.reduce((prev, cur) => prev + cur.weight, 0);
+      const selectedWeight = Math.random() * totalWeight;
+
+      const lastMenuName = localStorage.getItem("lastMenuName");
+
+      let startWeight = 0;
+      let selectedMenu;
+
+      for (let i = 0; i < menu.length; i++) {
+        const item = menu[i];
+
+        startWeight += item.weight;
+
+        // 가중치 기반으로 메뉴 선택
+        if (startWeight >= selectedWeight) {
+          selectedMenu = item;
+
+          // 연속된 메뉴가 선택되지 않도록 검사
+          if (selectedMenu.name === lastMenuName) {
+            // 다른 메뉴를 선택하기 위해 i 값을 조정
+            i = (i + 1) % menu.length;
+            selectedMenu = menu[i];
+          }
+          break;
+        }
+      }
+
+      // 마지막으로 선택한 메뉴를 로컬 스토리지에 저장
+      localStorage.setItem("lastMenuName", selectedMenu.name);
+
+      return selectedMenu;
+    }
+
+    const opMenu = document.getElementById("selectedMenu");
+
+    // 메뉴 불러오기 및 랜덤 메뉴 출력
+    async function loadAndDisplayMenu() {
+      const menu = await getMenu(); // Firestore에서 메뉴 불러오기
+      const todaysMenu = getRandomMenu(menu);
+      if (todaysMenu && todaysMenu.name) {
+        opMenu.innerText = todaysMenu.name;
+      } else {
+        opMenu.innerText = "메뉴를 선택할 수 없습니다.";
+      }
+    }
+
+    // 페이지 로드 시 메뉴 불러오기
+    window.onload = loadAndDisplayMenu;
+
+    const restaurantInput = document.getElementById("restaurantInput");
+    const addRestaurantButton = document.getElementById("addRestaurantButton");
+    const weightInput = document.getElementById("weightInput");
+
+    // 새로운 메뉴(식당) 추가
+    addRestaurantButton.addEventListener("click", async () => {
+      let newRestaurantName = restaurantInput.value.trim();
+      let newRestaurantWeight = Number(weightInput.value.trim());
+
+      // name은 반드시 문자열, weight는 숫자여야 함
+      if (
+        typeof newRestaurantName === "string" &&
+        !isNaN(newRestaurantWeight) &&
+        newRestaurantWeight > 0
+      ) {
+        // 새로운 메뉴 항목 생성
+        const newRestaurant = { name: String(newRestaurantName), weight: newRestaurantWeight };
+
+        const menu = await getMenu(); // Firestore에서 현재 메뉴 불러오기
+        menu.push(newRestaurant); // 새 메뉴 추가
+        await updateMenu(menu); // Firestore에 업데이트
+
+        restaurantInput.value = ""; // 입력 필드 초기화
+        weightInput.value = ""; // 가중치 입력 필드 초기화
+        alert(`${newRestaurantName} 추가 완료`);
+      } else {
+        alert("유효하지 않은 입력입니다. 식당 이름과 가중치를 정확히 입력하세요.");
+      }
+    });
+  </script>
 </html>
