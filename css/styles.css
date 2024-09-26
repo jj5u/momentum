@@ -17,6 +17,7 @@ body {
   font-family: "Ubuntu", sans-serif;
 }
 .header {
+  position: absolute;
   width: 88.8%;
   margin-top: 8px;
   display: flex;
@@ -48,6 +49,10 @@ input {
 input:focus {
   outline: 1px solid red;
 }
+input#weightInput {
+  width: 64px;
+  margin-left: 4px;
+}
 .header div:last-child form input {
   width: 140px;
 }
@@ -69,13 +74,25 @@ button {
   font-size: 64px;
 }
 #menu {
+  margin: auto;
   font-size: 24px;
-  border-bottom: 2px solid red;
   padding: 0 4px 3px;
-  margin-bottom: 15px;
+  text-align: center;
 }
 #menu span span {
   font-weight: 700;
+}
+#menu h2 {
+  width: fit-content;
+  margin-top: 16px;
+  border-bottom: 2px solid red;
+}
+#selectedMenu {
+  font-size: 64px;
+  word-break: keep-all;
+}
+#addRestaurantButton {
+  margin-left: 4px;
 }
 #quotes,
 #todo-form {
@@ -125,8 +142,8 @@ ul > li button {
   margin-left: 16px;
 }
 
-a {
-  position: absolute;
+.goto {
+  position: fixed;
   bottom: 0px;
   width: 100%;
   box-sizing: border-box;
